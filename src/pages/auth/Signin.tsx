@@ -2,47 +2,42 @@ import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
+import "react-toastify/dist/ReactToastify.min.css";
 import "../../index.css";
 import APIClient from "../../axios";
 
-interface signupData {
-  name: string;
+interface loginData {
   email: string;
   password: string;
-  password_confirmation: string;
 }
 
-const Signup = () => {
+const Signin = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<signupData>();
+  } = useForm<loginData>();
 
   const { t } = useTranslation();
 
   const navigate = useNavigate();
 
-  const signup = (data: signupData) => {
-    APIClient.post(
-      "register",
-      {
-        name: data.name,
-        email: data.email,
-        password: data.password,
-        password_confirmation: data.password_confirmation,
-      },
-      { withCredentials: true }
-    )
+  const login = (data: loginData) => {
+    APIClient.post("login", {
+      email: data.email,
+      password: data.password,
+    })
       .then((response) => {
         if (response.status === 200) {
-          toast.success(t("successfully_signed_up"));
-          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("token", response.data.token.token);
           localStorage.setItem("user", JSON.stringify(response.data.user));
-          navigate("/dashboard");
+          toast.success(t("successfully_logged_in"));
         } else {
           toast.error(t("errors.default_error"));
         }
+      })
+      .then(() => {
+        navigate("/dashboard");
       })
       .catch(() => {
         toast.error(t("errors.default_error"));
@@ -52,25 +47,9 @@ const Signup = () => {
   return (
     <div className="padding-30">
       <h1 className="text-center py-3 fs-3-bold">
-        {t("create_a_simple_issues_account")}
+        {t("signin_to_your_account")}
       </h1>
-      <form onSubmit={handleSubmit(signup)} className="py-4">
-        <div className="mb-4">
-          <label htmlFor="name" className="form-label">
-            {t("name")}
-          </label>
-          <input
-            {...register("name", { required: t("name_required") })}
-            type="text"
-            className="form-control"
-            id="name"
-          />
-          {errors.name && (
-            <p className="text-danger" style={{ fontSize: 14 }}>
-              {errors.name.message}
-            </p>
-          )}
-        </div>
+      <form onSubmit={handleSubmit(login)} className="py-4">
         <div className="mb-4">
           <label htmlFor="email" className="form-label">
             {t("email")}
@@ -103,32 +82,15 @@ const Signup = () => {
             </p>
           )}
         </div>
-        <div className="mb-4">
-          <label htmlFor="password_confirmation" className="form-label">
-            {t("password_confirmation")}
-          </label>
-          <input
-            {...register("password_confirmation", {
-              required: t("password_confirmation_required"),
-            })}
-            type="password"
-            className="form-control"
-            id="password_confirmation"
-          />
-          {errors.password_confirmation && (
-            <p className="text-danger" style={{ fontSize: 14 }}>
-              {errors.password_confirmation.message}
-            </p>
-          )}
-        </div>
         <div className="d-grid gap-2 mb-4">
           <button type="submit" className="btn btn-primary">
-            {t("signup")}
+            {t("signin")}
           </button>
         </div>
         <div className="mb-4">
           <p className="text-muted">
-            {t("have_an_account")} <Link to="/signin">{t("login_here")}</Link>
+            {t("dont_have_an_account")}{" "}
+            <Link to="/signup">{t("signup_here")}</Link>
           </p>
         </div>
       </form>
@@ -136,4 +98,4 @@ const Signup = () => {
   );
 };
 
-export default Signup;
+export default Signin;

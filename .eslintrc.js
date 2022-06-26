@@ -20,7 +20,11 @@ module.exports = {
   },
   plugins: ["react", "@typescript-eslint"],
   rules: {
+    "react/jsx-props-no-spreading": "off",
     "react/react-in-jsx-scope": "off",
+    "react/function-component-definition": "off",
+    "react/require-default-props": "off",
+    "no-param-reassign": "off",
     "react/jsx-filename-extension": [
       1,
       { extensions: [".js", ".jsx", ".ts", "tsx"] },

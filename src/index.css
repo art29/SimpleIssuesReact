@@ -11,3 +11,20 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.padding-30 {
+  padding-left: 30%;
+  padding-right: 30%;
+}
+
+@media only screen and (max-width: 600px) {
+  .padding-30 {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+}
+
+.fs-3-bold {
+  font-size: 3rem!important;
+  font-weight: bold;
+}
