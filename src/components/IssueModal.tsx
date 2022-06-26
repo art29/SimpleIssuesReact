@@ -127,6 +127,9 @@ const IssueModal = ({
                 styles={LabelSelectStyleConfig}
                 getOptionLabel={(l: any) => l.name}
                 getOptionValue={(l: any) => l.name}
+                onChange={(updatedLabels) =>
+                  setValue("labels", updatedLabels as any[])
+                }
               />
             </div>
             <div className="mb-3">

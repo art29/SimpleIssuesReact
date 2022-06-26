@@ -3,21 +3,21 @@ import { useTranslation } from "react-i18next";
 import APIClient from "../axios";
 import IssueCard from "../components/IssueCard";
 import "./Pages.css";
-import Filterbar from "../components/Filterbar";
+import Filterbar, { FilterParams } from "../components/Filterbar";
+import IssueModal from "../components/IssueModal";
 
 const Dashboard = () => {
   const [issues, setIssues] = useState([]);
   const [labels, setLabels] = useState([]);
   const [loading, setLoading] = useState(true);
-  // eslint-disable-next-line no-unused-vars
+  const [createMode, setCreateMode] = useState(false);
   const [organization, setOrganization] = useState("");
-  // eslint-disable-next-line no-unused-vars
   const [repo, setRepo] = useState("");
   const [fullscreen, setFullscreen] = useState<number | null>(null);
   const { t } = useTranslation();
 
-  const fetchIssues = () => {
-    APIClient.get("issues")
+  const fetchIssues = (filters?: FilterParams) => {
+    APIClient.get("issues", { params: filters ?? {} })
       .then((response) => {
         setIssues(response.data.issues);
         setLabels(response.data.labels);
@@ -44,7 +44,13 @@ const Dashboard = () => {
         </div>
       ) : (
         <>
-          <Filterbar />
+          <Filterbar
+            organization={organization}
+            repo={repo}
+            labels={labels}
+            reTriggerFetch={(filters: FilterParams) => fetchIssues(filters)}
+            createIssue={() => setCreateMode(true)}
+          />
           <div className="mb-4">
             {fullscreen !== null ? (
               <div className="px-10">
@@ -73,6 +79,12 @@ const Dashboard = () => {
               </div>
             )}
           </div>
+          <IssueModal
+            dialogState={createMode}
+            onClose={() => setCreateMode(false)}
+            reloadIssues={() => fetchIssues()}
+            labels={labels}
+          />
         </>
       )}
     </div>
