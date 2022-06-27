@@ -48,9 +48,37 @@ const IssueModal = ({
     setOpen(false);
   };
 
-  const submit = (data: IssueEditingBody) => {
+  const create = (data: IssueEditingBody) => {
+    APIClient.post(
+      "issues",
+      {
+        title: data.title,
+        body: data.body,
+        labels: data.labels.map((l) => l.name),
+      },
+      { withCredentials: true }
+    )
+      .then((response) => {
+        if (response.status === 200) {
+          toast.success(
+            t(
+              edit ? "successfully_updated_issue" : "successfully_created_issue"
+            )
+          );
+          handleClose();
+          reloadIssues();
+        } else {
+          toast.error(t("errors.default_error"));
+        }
+      })
+      .catch(() => {
+        toast.error(t("errors.default_error"));
+      });
+  };
+
+  const update = (data: IssueEditingBody) => {
     APIClient.patch(
-      edit ? `issues/${data?.number}` : "issues",
+      `issues/${data?.number}`,
       {
         title: data.title,
         body: data.body,
@@ -97,7 +125,7 @@ const IssueModal = ({
           {edit ? t("issues.edit_github_issue") : t("issues.new_github_issue")}
         </DialogTitle>
         <DialogContent>
-          <form onSubmit={handleSubmit(submit)}>
+          <form onSubmit={handleSubmit(edit ? update : create)}>
             <div className="mb-3">
               <label htmlFor="title" className="form-label">
                 {t("issues.title")}
