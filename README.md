@@ -1,46 +1,31 @@
-# Getting Started with Create React App
+# SimpleIssues
+An easy way to access and modify Github Issues.
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Note: This is only the front-end part. The back-end is available here: [https://github.com/art29/SimpleIssues](https://github.com/art29/SimpleIssues).
 
-## Available Scripts
+## Reason
+While using Github Issues and Zenhub a lot over the past few months, an issue appeared a lot: the fact that I always needed to move client tickets from a ToDo list or spreadsheet up to Github Issues which would take time. This app helps solve this by letting the user write the issues themselves in an easy editor that automatically communicates to the Github API through Github Apps.
 
-In the project directory, you can run:
+## How does it work?
+There are a few parts to this project:
 
-### `yarn start`
+### The admin side of things
+The Admin side of things is a bit more complicated than the user as you need link your organization or repo to the SimpleIssues App. First, you'll need to install the Github App called SimpleIssues (Coming soon). From there you can select your repo (I recommend you to select only the repo you are planning to use and to only give the Issues Permissions so the App has the less power as possible in case of a security vulnerabilty). Then, the install will redirect to the SimpleIssues website where you'll be able to Login or Signup and from there you'll be able to create the organization. Then, you'll be considered as an admin for that installation. You will be able to add other admins and users from an admin dashboard (available soon).
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### The user side of things
+The user side is pretty straight forward. You create an account and wait for an admin to add you to the SimpleIssues Organization through their dashboards. Then, you can select the organization you want from the list of available ones you have and select the repo. From there you can see all client issues and even create new ones through an easy interface!
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## What did I use to build this
+- ReactJS with Create React App
+- Typescript (Makes the code look cleaner and easier to read in my opinion)
+- Bootstrap (For easy styling)
+- Font-Awesome (For icons)
+- Axios (To communicate with the API)
+- Prettier
+- ESLint
 
-### `yarn test`
+I probably missed some :sweat_smile:, so you can look at the `package.json` file!
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Installation
 
-### `yarn build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+**Coming Soon**
