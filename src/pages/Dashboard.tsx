@@ -4,12 +4,14 @@ import { Outlet, useNavigate } from "react-router-dom";
 import IssueCard from "../components/IssueCard";
 import "./Pages.css";
 import Filterbar, { FilterParams } from "../components/Filterbar";
+import ErrorPage from "../components/ErrorPage";
 
 interface DashboardProps {
   issues: any[];
   labels: any[];
   organization: string;
   repo: string;
+  error: number | null;
   // eslint-disable-next-line no-unused-vars
   refreshIssues: (filters?: FilterParams) => void;
 }
@@ -19,6 +21,7 @@ const Dashboard = ({
   labels,
   organization,
   repo,
+  error,
   refreshIssues,
 }: DashboardProps) => {
   const [fullscreen, setFullscreen] = useState<number | null>(null);
@@ -36,12 +39,29 @@ const Dashboard = ({
   return (
     <>
       <div className="mx-3">
-        <h1 className="my-3 fs-3-bold">{t("my_dashboard")}</h1>
-        {!issues || !labels || !organization || !repo ? (
+        {error === null && (
+          <h1 className="my-3 fs-3-bold">{t("my_dashboard")}</h1>
+        )}
+        {!issues || !labels || !organization || !repo || error !== null ? (
           <div className="d-flex justify-content-center">
-            <div className="spinner-border" role="status">
-              <span className="visually-hidden">Loading...</span>
-            </div>
+            {error != null ? (
+              <ErrorPage
+                title={t(
+                  "errors.sorry_you_are_not_allowed_to_access_this_page"
+                )}
+                paragraph={[
+                  t("errors.please_make_sure_you_have_the_right_permissions"),
+                  t("errors.if_you_think_this_is_an_error"),
+                ]}
+                linkText={t(
+                  "errors.click_here_to_be_redirected_to_the_home_page"
+                )}
+              />
+            ) : (
+              <div className="spinner-border" role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+            )}
           </div>
         ) : (
           <>

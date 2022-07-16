@@ -45,7 +45,7 @@ const Signin = ({ refreshIssues }: signinProps) => {
       })
       .then(() => {
         navigate(
-          state.pathname ? `${state.pathname}${state.search}` : "/dashboard"
+          state?.pathname ? `${state.pathname}${state.search}` : "/dashboard"
         );
       })
       .catch(() => {

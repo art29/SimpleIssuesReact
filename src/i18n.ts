@@ -63,6 +63,20 @@ const resources = {
           "An error occurred while processing the issue... Please try again later.",
         missing_installation_id:
           "An error occurred since the installation ID given by GitHub is missing...",
+        sorry_you_are_not_allowed_to_access_this_page:
+          "Sorry... You are not allowed to access this page.",
+        please_make_sure_you_have_the_right_permissions:
+          "Please make sure you have the right permissions.",
+        if_you_think_this_is_an_error:
+          "If you think this is an error, please contact your organization's administrator.",
+        click_here_to_be_redirected_to_the_home_page:
+          "Click here to be redirected to the Home Page",
+        sorry_an_error_occurred_while_trying_to_access_this_page:
+          "Sorry, an error occurred while trying to access this page.",
+        please_try_again_later: "Please try again later.",
+        "404_error": "404 Error",
+        "404_paragraph":
+          "Sorry... The requested page was not found. Please make sure you enter a valid URL.",
       },
       home: {
         title: "Simple Issues",
@@ -132,6 +146,24 @@ const resources = {
             "Congratulations! You have successfully activated Simple Issues!",
           activate_error:
             "Sorry... An error occurred while we tried activating your repo with Github. Please try again later.",
+        },
+        manager: {
+          name: "Name",
+          email: "Email Address",
+          role: "Role",
+          admin: "Admin",
+          regular: "Regular",
+          save: "Save",
+          successfully_updated_role: "The role has been successfully updated!",
+          error_update_role:
+            "An error occurred while updating the role. Please try again later.",
+          cannot_change_your_own_role: "You cannot update your own role.",
+          remove: "Remove",
+          remove_user: "Remove User",
+          successfully_removed_user: "The user has been successfully removed!",
+          error_removing_user:
+            "An error occurred while removing the user. Please try again later.",
+          organization_colon: "Organization:",
         },
       },
       footer: {
@@ -203,6 +235,20 @@ const resources = {
         error_issue: "Une erreur s'est produite lors du traitement de l'issue",
         missing_installation_id:
           "Une erreur s'est produite car la clé d'installation fournie par GitHub est manquante...",
+        sorry_you_are_not_allowed_to_access_this_page:
+          "Désolé... Vous n'avez pas le droit d'accéder à cette page.",
+        please_make_sure_you_have_the_right_permissions:
+          "Veuillez vous assurez d'avoir les permissions valides.",
+        if_you_think_this_is_an_error:
+          "Si vous pensez qu'il s'agit d'une erreur, veuillez contacter l'administrateur de votre organisation.",
+        click_here_to_be_redirected_to_the_home_page:
+          "Cliquez ici pour être redirigé vers la page d'accueil",
+        sorry_an_error_occurred_while_trying_to_access_this_page:
+          "Désolé, une erreur s'est produite lorsque nous avons essayé d'accéder à cette page. error occurred while trying to access this page.",
+        please_try_again_later: "Veuillez réessayer plus tard.",
+        "404_error": "Erreur 404",
+        "404_paragraph":
+          "Désolé... La page demandée n'a pas été trouvée. Veuillez vous assurer que L'URL rentré est valide.",
       },
       home: {
         title: "Simple Issues",
@@ -275,6 +321,26 @@ const resources = {
           activate_error:
             "Désolé... Une erreur s'est produite lorsque nous avons essayer d'activer votre repo avec Github. Veuillez re-essayer plus tard.",
         },
+        manager: {
+          name: "Nom",
+          email: "Addresse Courriel",
+          role: "Role",
+          admin: "Administrateur",
+          regular: "Régulier",
+          save: "Sauvegarder",
+          successfully_updated_role: "Le role à été mis à jour avec succès!",
+          error_update_role:
+            "Une erreur est survenue lors de la mise à jour du role. Veuillez réessayer plus tard.",
+          cannot_change_your_own_role:
+            "Vous ne pouvez pas modifier votre propre role.",
+          remove: "Supprimer",
+          remove_user: "Supprimer l'utilisateur",
+          successfully_removed_user:
+            "L'utilisateur a été supprimé avec succès!",
+          error_removing_user:
+            "Une erreur est survenue lors de la suppression de l'utilisateur. Veuillez réessayer plus tard.",
+          organization_colon: "Organization :",
+        },
       },
       footer: {
         text: "Ce projet est sous la license AGPL-3, le code est disponible",
@@ -285,11 +351,13 @@ const resources = {
   },
 };
 
+const defaultLang: string = localStorage.getItem("defaultLang") ?? "en";
+
 i18n
   .use(initReactI18next) // passes i18n down to react-i18next
   .init({
     resources,
-    lng: "en",
+    lng: defaultLang,
     interpolation: {
       escapeValue: false, // react already safes from xss
     },

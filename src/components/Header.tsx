@@ -125,7 +125,11 @@ function Header() {
                     <li>
                       <button
                         type="button"
-                        onClick={() => i18n.changeLanguage("en")}
+                        onClick={() =>
+                          i18n.changeLanguage("en", () =>
+                            localStorage.setItem("defaultLang", "en")
+                          )
+                        }
                         className="dropdown-item"
                       >
                         {t("english")}
@@ -134,7 +138,11 @@ function Header() {
                     <li>
                       <button
                         type="button"
-                        onClick={() => i18n.changeLanguage("fr")}
+                        onClick={() =>
+                          i18n.changeLanguage("fr", () =>
+                            localStorage.setItem("defaultLang", "fr")
+                          )
+                        }
                         className="dropdown-item"
                       >
                         {t("french")}
