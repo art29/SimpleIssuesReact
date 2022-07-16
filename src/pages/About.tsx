@@ -6,7 +6,7 @@ const About = () => {
 
   return (
     <div className="m-3-40">
-      <h1 className="my-3 fs-3-bold">{t("home.title")}</h1>
+      <h1 className="my-3 fs-3-bold">{t("about.title")}</h1>
       <p>
         {t("about.paragraph")}
         <br />

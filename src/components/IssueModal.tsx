@@ -3,14 +3,15 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useEffect, useState } from "react";
 import Select from "react-select";
 import { useForm } from "react-hook-form";
-import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import { useLocation, useNavigate, Outlet } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import Editor from "./Editor/Editor";
 import APIClient from "../axios";
 import LabelSelectStyleConfig from "./LabelSelectStyleConfig";
+import { FilterParams } from "./Filterbar";
 
 interface IssueEditingBody {
   number?: number;
@@ -19,33 +20,26 @@ interface IssueEditingBody {
   labels: any[];
 }
 
-interface IssueModalProps {
-  dialogState: boolean;
+interface IssueModalItems {
   edit?: boolean;
   editingBody?: IssueEditingBody | null;
   labels: any[];
-  onClose: () => void;
-  reloadIssues: () => void;
 }
 
-const IssueModal = ({
-  dialogState,
-  labels,
-  edit = false,
-  editingBody = null,
-  onClose,
-  reloadIssues,
-}: IssueModalProps) => {
-  const [open, setOpen] = useState(false);
-  const { t } = useTranslation();
+interface IssueModalProps {
+  // eslint-disable-next-line no-unused-vars
+  refreshIssues: (filters?: FilterParams) => void;
+}
 
-  useEffect(() => {
-    setOpen(dialogState);
-  }, [dialogState]);
+const IssueModal = ({ refreshIssues }: IssueModalProps) => {
+  const navigate = useNavigate();
+  const { t } = useTranslation();
+  const { state } = useLocation();
+  const { edit, editingBody, labels } = state as IssueModalItems;
 
   const handleClose = () => {
-    onClose();
-    setOpen(false);
+    refreshIssues();
+    navigate("/dashboard");
   };
 
   const create = (data: IssueEditingBody) => {
@@ -66,7 +60,6 @@ const IssueModal = ({
             )
           );
           handleClose();
-          reloadIssues();
         } else {
           toast.error(t("errors.default_error"));
         }
@@ -94,7 +87,6 @@ const IssueModal = ({
             )
           );
           handleClose();
-          reloadIssues();
         } else {
           toast.error(t("errors.default_error"));
         }
@@ -119,74 +111,82 @@ const IssueModal = ({
   });
 
   return (
-    <div>
-      <Dialog open={open} onClose={handleClose} fullWidth>
-        <DialogTitle>
-          {edit ? t("issues.edit_github_issue") : t("issues.new_github_issue")}
-        </DialogTitle>
-        <DialogContent>
-          <form onSubmit={handleSubmit(edit ? update : create)}>
-            <div className="mb-3">
-              <label htmlFor="title" className="form-label">
-                {t("issues.title")}
-              </label>
-              <input
-                id="title"
-                type="text"
-                className="form-control"
-                placeholder="Title of the issue"
-                {...register("title", { required: t("issues.title_required") })}
-              />
-              {errors.title && (
-                <p className="text-danger" style={{ fontSize: 14 }}>
-                  {errors.title.message}
-                </p>
-              )}
-            </div>
-            <div className="mb-3">
-              <label htmlFor="labels" className="form-label">
-                {t("issues.labels")}
-              </label>
-              <Select
-                id="labels"
-                isMulti
-                defaultValue={editingBody?.labels ?? []}
-                options={labels}
-                styles={LabelSelectStyleConfig}
-                getOptionLabel={(l: any) => l.name}
-                getOptionValue={(l: any) => l.name}
-                onChange={(updatedLabels) =>
-                  setValue("labels", updatedLabels as any[])
-                }
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="description" className="form-label">
-                {t("issues.issue_description")}
-              </label>
-              <Editor
-                initalMarkdown={editingBody?.body}
-                setOutputMarkdown={(markdown) => {
-                  setValue("body", markdown);
-                }}
-              />
-            </div>
-            <button type="submit" className="btn btn-primary">
-              {t("submit")}
+    <>
+      <div>
+        <Dialog open onClose={handleClose} fullWidth>
+          <DialogTitle>
+            {edit
+              ? t("issues.edit_github_issue")
+              : t("issues.new_github_issue")}
+          </DialogTitle>
+          <DialogContent>
+            <form onSubmit={handleSubmit(edit ? update : create)}>
+              <div className="mb-3">
+                <label htmlFor="title" className="form-label">
+                  {t("issues.title")}
+                </label>
+                <input
+                  id="title"
+                  type="text"
+                  className="form-control"
+                  placeholder="Title of the issue"
+                  {...register("title", {
+                    required: t("issues.title_required"),
+                  })}
+                />
+                {errors.title && (
+                  <p className="text-danger" style={{ fontSize: 14 }}>
+                    {errors.title.message}
+                  </p>
+                )}
+              </div>
+              <div className="mb-3">
+                <label htmlFor="labels" className="form-label">
+                  {t("issues.labels")}
+                </label>
+                <Select
+                  id="labels"
+                  isMulti
+                  defaultValue={editingBody?.labels ?? []}
+                  placeholder={t("issues.select_applicable_labels")}
+                  options={labels}
+                  styles={LabelSelectStyleConfig}
+                  getOptionLabel={(l: any) => l.name}
+                  getOptionValue={(l: any) => l.name}
+                  onChange={(updatedLabels) =>
+                    setValue("labels", updatedLabels as any[])
+                  }
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="description" className="form-label">
+                  {t("issues.issue_description")}
+                </label>
+                <Editor
+                  initalMarkdown={editingBody?.body}
+                  setOutputMarkdown={(markdown) => {
+                    setValue("body", markdown);
+                  }}
+                />
+              </div>
+              <button type="submit" className="btn btn-primary">
+                {t("submit")}
+              </button>
+            </form>
+          </DialogContent>
+          <DialogActions>
+            <button
+              type="button"
+              className="btn btn-secondary"
+              onClick={handleClose}
+            >
+              {t("close")}
             </button>
-          </form>
-        </DialogContent>
-        <DialogActions>
-          <button
-            type="button"
-            className="btn btn-secondary"
-            onClick={handleClose}
-          >
-            {t("close")}
-          </button>
-        </DialogActions>
-      </Dialog>
-    </div>
+          </DialogActions>
+        </Dialog>
+      </div>
+      <Outlet />
+    </>
   );
 };
 export default IssueModal;

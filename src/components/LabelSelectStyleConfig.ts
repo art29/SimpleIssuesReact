@@ -50,7 +50,12 @@ export default LabelSelectStyleConfig;
 
 export const LabelSelectFilterStyleConfig: StylesConfig<any, true> = {
   control: (styles: any) => ({ ...styles, backgroundColor: "black" }),
-  menu: (styles: any) => ({ ...styles, backgroundColor: "black" }),
+  menu: (styles: any) => ({
+    ...styles,
+    backgroundColor: "black",
+    width: "max-content",
+    minWidth: "100%",
+  }),
   option: (styles, { data, isFocused, isSelected }) => {
     const color = chroma(data.color);
     return {

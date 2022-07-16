@@ -36,7 +36,7 @@ const Filterbar = ({
         </span>
         <div className="ms-auto mb-2 mb-lg-0 gap-2 d-flex flex-row">
           <div className="d-flex flex-row align-items-center gap-2">
-            <label htmlFor="labels">{t("issues.labels")}</label>
+            <label htmlFor="labels">{t("issues.filter_labels")}</label>
             <Select
               id="labels"
               isMulti

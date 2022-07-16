@@ -41,7 +41,7 @@ const Editor = ({ initalMarkdown, setOutputMarkdown }: EditorProp) => {
   const Placeholder = () => {
     return (
       <div className="editor-placeholder">
-        {t("enter_a_bug_report_or_improvement")}){" "}
+        {t("enter_a_bug_report_or_improvement")}{" "}
       </div>
     );
   };

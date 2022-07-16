@@ -7,9 +7,9 @@ import { solid } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { Tooltip } from "@mui/material";
 import { toast } from "react-toastify";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import APIClient from "../axios";
 import AlertDialog from "./ConfirmationDialog";
-import IssueModal from "./IssueModal";
 
 interface IssueCardProp {
   issue: any;
@@ -28,8 +28,23 @@ const IssueCard = ({
   reloadIssues,
 }: IssueCardProp) => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
-  const [editMode, setEditMode] = useState(false);
+
+  const openModal = (edit = false) => {
+    navigate("/dashboard/issues", {
+      state: {
+        edit,
+        editingBody: {
+          number: issue.number,
+          title: issue.title,
+          body: issue.body,
+          labels: issue.labels,
+        },
+        labels,
+      },
+    });
+  };
 
   const deleteIssue = () => {
     APIClient.delete(`issues/${issue.number}`, { withCredentials: true })
@@ -113,7 +128,7 @@ const IssueCard = ({
         <button
           type="button"
           className="btn btn-primary me-2"
-          onClick={() => setEditMode(true)}
+          onClick={() => openModal(true)}
         >
           {t("edit")}
         </button>
@@ -131,19 +146,6 @@ const IssueCard = ({
           trueText={t("yes")}
           action={deleteIssue}
           onClose={() => setOpenDeleteModal(false)}
-        />
-        <IssueModal
-          dialogState={editMode}
-          edit
-          editingBody={{
-            number: issue.number,
-            title: issue.title,
-            body: issue.body,
-            labels: issue.labels,
-          }}
-          onClose={() => setEditMode(false)}
-          reloadIssues={() => reloadIssues()}
-          labels={labels}
         />
       </div>
     </div>

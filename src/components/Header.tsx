@@ -36,7 +36,7 @@ function Header() {
       <div className="navbar navbar-expand-lg">
         <div className="container-fluid fs-1-15">
           <Link to="/" className="d-flex text-white text-decoration-none px-3">
-            <b>SimpleIssues</b>
+            <b>Simple Issues</b>
           </Link>
 
           <button
@@ -63,9 +63,17 @@ function Header() {
                   {t("navbar.about")}
                 </Link>
               </li>
+              <li>
+                <Link to="/help" className={getNavLinkClass("/help")}>
+                  {t("navbar.help")}
+                </Link>
+              </li>
               {localStorage.getItem("token") && (
                 <li>
-                  <Link to="/dashboard" className="nav-link px-3 text-white">
+                  <Link
+                    to="/dashboard"
+                    className={getNavLinkClass("/dashboard")}
+                  >
                     {t("dashboard")}
                   </Link>
                 </li>

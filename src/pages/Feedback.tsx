@@ -13,32 +13,28 @@ const Feedback = () => {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm<FeedbackFormData>();
 
   const { t } = useTranslation();
 
   const signup = (data: FeedbackFormData) => {
-    APIClient.post(
-      "feedback",
-      {
-        name: data.name,
-        email: data.email,
-        message: data.message,
-      },
-      { withCredentials: true }
-    )
+    APIClient.post("feedback/send", {
+      name: data.name,
+      email: data.email,
+      message: data.message,
+    })
       .then((response) => {
         if (response.status === 200) {
           toast.success(t("successfully_sent_feedback"));
+          reset();
         } else {
-          toast.success(t("successfully_sent_feedback"));
-          // toast.error(t("errors.default_error"));
+          toast.error(t("errors.default_error"));
         }
       })
       .catch(() => {
-        toast.success(t("successfully_sent_feedback"));
-        // toast.error(t("errors.default_error"));
+        toast.error(t("errors.default_error"));
       });
   };
 

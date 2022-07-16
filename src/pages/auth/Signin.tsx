@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.min.css";
 import "../../index.css";
 import APIClient from "../../axios";
@@ -11,12 +11,18 @@ interface loginData {
   password: string;
 }
 
-const Signin = () => {
+interface signinProps {
+  refreshIssues: () => void;
+}
+
+const Signin = ({ refreshIssues }: signinProps) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<loginData>();
+
+  const { state }: any = useLocation();
 
   const { t } = useTranslation();
 
@@ -31,13 +37,16 @@ const Signin = () => {
         if (response.status === 200) {
           localStorage.setItem("token", response.data.token.token);
           localStorage.setItem("user", JSON.stringify(response.data.user));
+          refreshIssues();
           toast.success(t("successfully_logged_in"));
         } else {
           toast.error(t("errors.default_error"));
         }
       })
       .then(() => {
-        navigate("/dashboard");
+        navigate(
+          state.pathname ? `${state.pathname}${state.search}` : "/dashboard"
+        );
       })
       .catch(() => {
         toast.error(t("errors.default_error"));

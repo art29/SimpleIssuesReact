@@ -11,7 +11,7 @@ function Home() {
         <h1 className="my-3 fs-3-bold">{t("home.title")}</h1>
         <p>{t("home.paragraph")}</p>
       </div>
-      <div className="d-grid gap-2 col-md-4 px-2 mx-auto text-center">
+      <div className="d-grid gap-2 col-md-4 px-2">
         {!localStorage.getItem("token") ? (
           <>
             <Link to="/signin" className="btn btn-primary btn-lg py-2-5">
@@ -22,7 +22,7 @@ function Home() {
             </Link>
           </>
         ) : (
-          <Link to="/dashboard" className="btn btn-primary btn-lg py-2-5 my-3">
+          <Link to="/dashboard" className="btn btn-primary btn-lg py-2-5">
             {t("home.go_to_my_dashboard")}
           </Link>
         )}
