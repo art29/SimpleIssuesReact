@@ -36,4 +36,4 @@ jobs:
           script: |
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
-            sh deploy-simpleissues-api.sh
+            sh deploy-simpleissues.sh
