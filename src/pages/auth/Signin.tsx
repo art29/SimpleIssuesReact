@@ -99,7 +99,16 @@ const Signin = ({ refreshIssues }: signinProps) => {
         <div className="mb-4">
           <p className="text-muted mb-1">
             {t("dont_have_an_account")}{" "}
-            <Link to="/signup">{t("signup_here")}</Link>
+            <Link
+              to="/signup"
+              state={
+                state.pathname
+                  ? { pathname: state.pathname, search: state.search }
+                  : {}
+              }
+            >
+              {t("signup_here")}
+            </Link>
           </p>
           <p className="text-muted mb-1">
             {t("forgot_password.forgot_password")}{" "}

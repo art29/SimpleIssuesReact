@@ -1,7 +1,7 @@
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../../index.css";
 import APIClient from "../../axios";
 
@@ -20,7 +20,7 @@ const Signup = () => {
   } = useForm<signupData>();
 
   const { t } = useTranslation();
-
+  const { state }: any = useLocation();
   const navigate = useNavigate();
 
   const signup = (data: signupData) => {
@@ -128,7 +128,17 @@ const Signup = () => {
         </div>
         <div className="mb-4">
           <p className="text-muted mb-1">
-            {t("have_an_account")} <Link to="/signin">{t("login_here")}</Link>
+            {t("have_an_account")}{" "}
+            <Link
+              to="/signin"
+              state={
+                state.pathname
+                  ? { pathname: state.pathname, search: state.search }
+                  : {}
+              }
+            >
+              {t("login_here")}
+            </Link>
           </p>
           <p className="text-muted mb-1">
             {t("forgot_password.forgot_password")}{" "}
