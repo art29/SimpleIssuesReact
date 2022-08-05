@@ -1,10 +1,12 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import APIClient from "../../axios";
 
 const Activate = () => {
+  const [orgName, setOrgName] = useState<string>("");
+  const [orgNameError, setOrgNameError] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { t } = useTranslation();
@@ -18,20 +20,26 @@ const Activate = () => {
   }, []);
 
   const activate = () => {
-    APIClient.post("organizations/activate", {
-      installation_id: installationId,
-    })
-      .then((response) => {
-        if (response.status === 200) {
-          toast.success(t("organizations.activate.activate_success"));
-        } else {
-          toast.error(t("organizations.activate.activate_error"));
-        }
+    if (orgName) {
+      setOrgNameError(false);
+      APIClient.post("organizations/activate", {
+        installation_id: installationId,
+        organization_name: orgName,
       })
-      .catch(() => {
-        toast.error(t("organizations.activate.activate_error"));
-      });
-    navigate("/dashboard");
+        .then((response) => {
+          if (response.status === 200) {
+            toast.success(t("organizations.activate.activate_success"));
+          } else {
+            toast.error(t("organizations.activate.activate_error"));
+          }
+        })
+        .catch(() => {
+          toast.error(t("organizations.activate.activate_error"));
+        });
+      navigate("/dashboard");
+    } else {
+      setOrgNameError(true);
+    }
   };
 
   const refuse = () => {
@@ -43,6 +51,25 @@ const Activate = () => {
       <h1 className="display-5 fw-bold">{t("organizations.activate.title")}</h1>
       <div className="col-lg-6 mx-auto">
         <p className="lead mb-4">{t("organizations.activate.paragraph")}</p>
+        <div className="form-group my-3">
+          <label htmlFor="organization_name" className="form-label">
+            {t("organizations.activate.organization_name")}
+          </label>
+          <input
+            id="organization_name"
+            type="text"
+            className="form-control"
+            value={orgName}
+            onChange={(e) => setOrgName(e.target.value)}
+          />
+          {orgNameError && (
+            <p className="text-danger" style={{ fontSize: 14 }}>
+              {t(
+                "organizations.activate.please_make_sure_you_enter_a_valid_organization_name"
+              )}
+            </p>
+          )}
+        </div>
         <div className="d-grid gap-2 d-sm-flex justify-content-sm-center">
           <button
             type="button"

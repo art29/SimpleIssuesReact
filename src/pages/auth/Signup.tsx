@@ -127,8 +127,12 @@ const Signup = () => {
           </button>
         </div>
         <div className="mb-4">
-          <p className="text-muted">
+          <p className="text-muted mb-1">
             {t("have_an_account")} <Link to="/signin">{t("login_here")}</Link>
+          </p>
+          <p className="text-muted mb-1">
+            {t("forgot_password.forgot_password")}{" "}
+            <Link to="/forgot_password">{t("reset_it_here")}</Link>
           </p>
         </div>
       </form>

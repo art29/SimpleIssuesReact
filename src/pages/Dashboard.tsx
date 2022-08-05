@@ -3,26 +3,40 @@ import { useTranslation } from "react-i18next";
 import { Outlet, useNavigate } from "react-router-dom";
 import IssueCard from "../components/IssueCard";
 import "./Pages.css";
-import Filterbar, { FilterParams } from "../components/Filterbar";
+import Filterbar, {
+  FilterParams,
+  Organization,
+  Repo,
+} from "../components/Filterbar";
 import ErrorPage from "../components/ErrorPage";
 
 interface DashboardProps {
   issues: any[];
   labels: any[];
-  organization: string;
+  organization: Organization | null;
+  organizations: Organization[];
   repo: string;
+  repos: Repo[];
+  loadingIssues: boolean;
   error: number | null;
   // eslint-disable-next-line no-unused-vars
   refreshIssues: (filters?: FilterParams) => void;
+  refreshOrganizations: () => void;
+  refreshRepos: () => void;
 }
 
 const Dashboard = ({
   issues,
   labels,
   organization,
+  organizations,
   repo,
+  repos,
+  loadingIssues,
   error,
   refreshIssues,
+  refreshOrganizations,
+  refreshRepos,
 }: DashboardProps) => {
   const [fullscreen, setFullscreen] = useState<number | null>(null);
   const { t } = useTranslation();
@@ -42,7 +56,12 @@ const Dashboard = ({
         {error === null && (
           <h1 className="my-3 fs-3-bold">{t("my_dashboard")}</h1>
         )}
-        {!issues || !labels || !organization || !repo || error !== null ? (
+        {!issues ||
+        !labels ||
+        !organization ||
+        !repo ||
+        error !== null ||
+        loadingIssues ? (
           <div className="d-flex justify-content-center">
             {error != null ? (
               <ErrorPage
@@ -67,10 +86,14 @@ const Dashboard = ({
           <>
             <Filterbar
               organization={organization}
+              organizations={organizations}
               repo={repo}
+              repos={repos}
               labels={labels}
               reTriggerFetch={(filters: FilterParams) => refreshIssues(filters)}
               createIssue={() => openModal()}
+              fetchRepos={() => refreshRepos()}
+              fetchOrganizations={() => refreshOrganizations()}
             />
             <div className="mb-4">
               {fullscreen !== null ? (

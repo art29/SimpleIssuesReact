@@ -23,6 +23,7 @@ const resources = {
       update: "Update",
       logout: "Logout",
       signin: "Sign In",
+      reset_it_here: "Reset it here",
       signin_to_your_account: "Sign In into your account",
       signup: "Sign Up",
       create_a_simple_issues_account: "Create an Account",
@@ -77,6 +78,10 @@ const resources = {
         "404_error": "404 Error",
         "404_paragraph":
           "Sorry... The requested page was not found. Please make sure you enter a valid URL.",
+        error_changing_organization:
+          "There was an error while changing the organization, please try again later.",
+        error_changing_repo:
+          "There was an error while changing the repo, please try again later.",
       },
       home: {
         title: "Simple Issues",
@@ -146,6 +151,9 @@ const resources = {
             "Congratulations! You have successfully activated Simple Issues!",
           activate_error:
             "Sorry... An error occurred while we tried activating your repo with Github. Please try again later.",
+          organization_name: "Organization Name",
+          please_make_sure_you_enter_a_valid_organization_name:
+            "Please make sure you enter a valid organization name.",
         },
         manager: {
           name: "Name",
@@ -165,6 +173,21 @@ const resources = {
             "An error occurred while removing the user. Please try again later.",
           organization_colon: "Organization:",
         },
+      },
+      forgot_password: {
+        forgot_password: "Forgot your password?",
+        reset_your_password: "Reset your password now",
+        successfully_sent_reset_email:
+          "Successfully sent your password reset link by email!",
+        error_occurred_while_resetting_your_password:
+          "An error occurred while trying to reset your password. Please try again later...",
+      },
+      reset_password: {
+        reset_your_password: "Reset your password",
+        successfully_reset_password:
+          "Successfully reset your password! You can now Sign In!",
+        error_occurred_while_resetting_your_password:
+          "An error occurred while trying to reset your password. Please try again later...",
       },
       footer: {
         text: "This project is under the AGPL-3 License, the code is available",
@@ -194,6 +217,7 @@ const resources = {
       update: "Mettre à jour",
       logout: "Se déconnecter",
       signin: "Se connecter",
+      reset_it_here: "Réinitaliser le ici",
       signin_to_your_account: "Connectez-vous à votre compte",
       signup: "Créer un compte",
       create_a_simple_issues_account: "Créer un compte",
@@ -249,6 +273,10 @@ const resources = {
         "404_error": "Erreur 404",
         "404_paragraph":
           "Désolé... La page demandée n'a pas été trouvée. Veuillez vous assurer que L'URL rentré est valide.",
+        error_changing_organization:
+          "Il y a eu une erreur lors du changement d'organization, veuillez réessayer plus tard",
+        error_changing_repo:
+          "Il y a eu une erreur lors du changement de repo, veuillez réessayer plus tard",
       },
       home: {
         title: "Simple Issues",
@@ -320,6 +348,9 @@ const resources = {
             "Félicitations! Vous avez activé Simple Issues avec succès !",
           activate_error:
             "Désolé... Une erreur s'est produite lorsque nous avons essayer d'activer votre repo avec Github. Veuillez re-essayer plus tard.",
+          organization_name: "Nom de l'organization",
+          please_make_sure_you_enter_a_valid_organization_name:
+            "Veuillez entrer un nom valide pour l'organization.",
         },
         manager: {
           name: "Nom",
@@ -341,6 +372,21 @@ const resources = {
             "Une erreur est survenue lors de la suppression de l'utilisateur. Veuillez réessayer plus tard.",
           organization_colon: "Organization :",
         },
+      },
+      forgot_password: {
+        forgot_password: "Vous avez oublié votre mot de passe ?",
+        reset_your_password: "Reinitialiser votre mot de passe maintenant",
+        successfully_sent_reset_email:
+          "Un lien pour reinitialiser votre mot de passe vient de vous être envoyé par courriel !",
+        error_occurred_while_resetting_your_password:
+          "Une erreur s'est produite lorsque nous avons essayés de reinitaliser votre mot de passe. Veuilez réessayer plus tard...",
+      },
+      reset_password: {
+        reset_your_password: "Reinitaliser votre mot de passe",
+        successfully_reset_password:
+          "Nous avons reinitalisés votre mot de passe avec succès ! Vous pouvez maintenant vous connecter !",
+        error_occurred_while_resetting_your_password:
+          "Une erreur s'est produite lorsque nous avons essayés de reinitaliser votre mot de passe. Veuilez réessayer plus tard...",
       },
       footer: {
         text: "Ce projet est sous la license AGPL-3, le code est disponible",

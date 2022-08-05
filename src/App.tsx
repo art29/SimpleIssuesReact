@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap";
 import "./i18n";
 import { Route, Routes } from "react-router-dom";
-import { Slide, ToastContainer } from "react-toastify";
+import { Slide, toast, ToastContainer } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import Header from "./components/Header";
 import Signup from "./pages/auth/Signup";
@@ -17,21 +17,47 @@ import Footer from "./components/Footer";
 import Feedback from "./pages/Feedback";
 import Help from "./pages/Help";
 import IssueModal from "./components/IssueModal";
-import { FilterParams } from "./components/Filterbar";
+import { FilterParams, Organization, Repo } from "./components/Filterbar";
 import APIClient from "./axios";
 import Activate from "./pages/organizations/Activate";
 import OrganizationManager from "./pages/organizations/OrganizationManager";
 import ErrorPage from "./components/ErrorPage";
+import ForgotPassword from "./pages/auth/ForgotPassword";
+import ResetPassword from "./pages/auth/ResetPassword";
 
 function App() {
   const [issues, setIssues] = useState<any[]>([]);
   const [labels, setLabels] = useState<any[]>([]);
-  const [organization, setOrganization] = useState<string>("");
+  const [organization, setOrganization] = useState<Organization | null>(null);
   const [repo, setRepo] = useState<string>("");
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
+  const [repos, setRepos] = useState<Repo[]>([]);
   const [error, setError] = useState<number | null>(null);
+  const [loading, setLoading] = useState(false);
   const { t } = useTranslation();
 
+  const fetchOrganizations = () => {
+    APIClient.get("users/organizations")
+      .then((response) => {
+        setOrganizations(response.data.organizations);
+      })
+      .catch(() => {
+        toast.error(t("errors.default_error"));
+      });
+  };
+
+  const fetchRepos = () => {
+    APIClient.get("users/repos")
+      .then((response) => {
+        setRepos(response.data.repos);
+      })
+      .catch(() => {
+        toast.error(t("errors.default_error"));
+      });
+  };
+
   const fetchIssues = (filters?: FilterParams) => {
+    setLoading(true);
     APIClient.get("issues", { params: filters ?? {} })
       .then((response) => {
         setIssues(response.data.issues);
@@ -41,12 +67,15 @@ function App() {
       })
       .catch((e) => {
         setError(e.response.status);
-      });
+      })
+      .then(() => setLoading(false));
   };
 
   useEffect(() => {
     if (localStorage.getItem("token")) {
       fetchIssues();
+      fetchOrganizations();
+      fetchRepos();
     }
   }, []);
 
@@ -62,6 +91,8 @@ function App() {
             element={<Signin refreshIssues={() => fetchIssues()} />}
           />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/forgot_password" element={<ForgotPassword />} />
+          <Route path="/reset_password" element={<ResetPassword />} />
           <Route path="/feedback" element={<Feedback />} />
           <Route path="/help" element={<Help />} />
           <Route
@@ -88,11 +119,16 @@ function App() {
                   issues={issues}
                   labels={labels}
                   organization={organization}
+                  organizations={organizations}
                   repo={repo}
+                  repos={repos}
                   error={error}
+                  loadingIssues={loading}
                   refreshIssues={(filters?: FilterParams) =>
                     fetchIssues(filters)
                   }
+                  refreshOrganizations={() => fetchOrganizations()}
+                  refreshRepos={() => fetchRepos()}
                 />
               </PrivateRoute>
             }

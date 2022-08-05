@@ -1,52 +1,52 @@
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.min.css";
 import "../../index.css";
+import { useEffect } from "react";
 import APIClient from "../../axios";
 
 interface loginData {
-  email: string;
   password: string;
+  password_confirmation: string;
 }
 
-interface signinProps {
-  refreshIssues: () => void;
-}
+const ResetPassword = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const hash = searchParams.get("hash");
 
-const Signin = ({ refreshIssues }: signinProps) => {
+  useEffect(() => {
+    if (!hash) {
+      toast.error(t("errors.invalid_link"));
+      navigate("/signin");
+    }
+  }, []);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<loginData>();
 
-  const { state }: any = useLocation();
-
-  const { t } = useTranslation();
-
-  const navigate = useNavigate();
-
-  const login = (data: loginData) => {
-    APIClient.post("login", {
-      email: data.email,
+  const resetPassword = (data: loginData) => {
+    APIClient.post("reset_password", {
       password: data.password,
+      password_confirmation: data.password_confirmation,
+      hash,
     })
       .then((response) => {
         if (response.status === 200) {
-          localStorage.setItem("token", response.data.token.token);
-          localStorage.setItem("user", JSON.stringify(response.data.user));
-          refreshIssues();
-          toast.success(t("successfully_logged_in"));
+          toast.success(t("reset_password.successfully_reset_password"));
         } else {
-          toast.error(t("errors.default_error"));
+          toast.error(
+            t("reset_password.error_occurred_while_resetting_your_password")
+          );
         }
       })
       .then(() => {
-        navigate(
-          state?.pathname ? `${state.pathname}${state.search}` : "/dashboard"
-        );
+        navigate("/signin");
       })
       .catch(() => {
         toast.error(t("errors.default_error"));
@@ -56,25 +56,9 @@ const Signin = ({ refreshIssues }: signinProps) => {
   return (
     <div className="padding-30">
       <h1 className="text-center py-3 fs-3-bold">
-        {t("signin_to_your_account")}
+        {t("reset_password.reset_your_password")}
       </h1>
-      <form onSubmit={handleSubmit(login)} className="py-4">
-        <div className="mb-4">
-          <label htmlFor="email" className="form-label">
-            {t("email")}
-          </label>
-          <input
-            {...register("email", { required: t("email_required") })}
-            type="email"
-            className="form-control"
-            id="email"
-          />
-          {errors.email && (
-            <p className="text-danger" style={{ fontSize: 14 }}>
-              {errors.email.message}
-            </p>
-          )}
-        </div>
+      <form onSubmit={handleSubmit(resetPassword)} className="py-4">
         <div className="mb-4">
           <label htmlFor="password" className="form-label">
             {t("password")}
@@ -91,9 +75,27 @@ const Signin = ({ refreshIssues }: signinProps) => {
             </p>
           )}
         </div>
+        <div className="mb-4">
+          <label htmlFor="password_confirmation" className="form-label">
+            {t("password_confirmation")}
+          </label>
+          <input
+            {...register("password_confirmation", {
+              required: t("password_confirmation_required"),
+            })}
+            type="password"
+            className="form-control"
+            id="password_confirmation"
+          />
+          {errors.password_confirmation && (
+            <p className="text-danger" style={{ fontSize: 14 }}>
+              {errors.password_confirmation.message}
+            </p>
+          )}
+        </div>
         <div className="d-grid gap-2 mb-4">
           <button type="submit" className="btn btn-primary">
-            {t("signin")}
+            {t("reset_password.reset_your_password")}
           </button>
         </div>
         <div className="mb-4">
@@ -111,4 +113,4 @@ const Signin = ({ refreshIssues }: signinProps) => {
   );
 };
 
-export default Signin;
+export default ResetPassword;
