@@ -68,6 +68,7 @@ const Signin = ({ refreshIssues }: signinProps) => {
             type="email"
             className="form-control"
             id="email"
+            autoComplete="username"
           />
           {errors.email && (
             <p className="text-danger" style={{ fontSize: 14 }}>
@@ -84,6 +85,7 @@ const Signin = ({ refreshIssues }: signinProps) => {
             type="password"
             className="form-control"
             id="password"
+            autoComplete="current-password"
           />
           {errors.password && (
             <p className="text-danger" style={{ fontSize: 14 }}>
@@ -102,7 +104,7 @@ const Signin = ({ refreshIssues }: signinProps) => {
             <Link
               to="/signup"
               state={
-                state.pathname
+                state?.pathname
                   ? { pathname: state.pathname, search: state.search }
                   : {}
               }

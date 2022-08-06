@@ -37,9 +37,11 @@ const Signup = () => {
       .then((response) => {
         if (response.status === 200) {
           toast.success(t("successfully_signed_up"));
-          localStorage.setItem("token", response.data.token);
+          localStorage.setItem("token", response.data.token.token);
           localStorage.setItem("user", JSON.stringify(response.data.user));
-          navigate("/dashboard");
+          navigate(
+            state?.pathname ? `${state.pathname}${state.search}` : "/dashboard"
+          );
         } else {
           toast.error(t("errors.default_error"));
         }
@@ -80,6 +82,7 @@ const Signup = () => {
             type="email"
             className="form-control"
             id="email"
+            autoComplete="username"
           />
           {errors.email && (
             <p className="text-danger" style={{ fontSize: 14 }}>
@@ -96,6 +99,7 @@ const Signup = () => {
             type="password"
             className="form-control"
             id="password"
+            autoComplete="new-password"
           />
           {errors.password && (
             <p className="text-danger" style={{ fontSize: 14 }}>
@@ -114,6 +118,7 @@ const Signup = () => {
             type="password"
             className="form-control"
             id="password_confirmation"
+            autoComplete="new-password"
           />
           {errors.password_confirmation && (
             <p className="text-danger" style={{ fontSize: 14 }}>
@@ -132,7 +137,7 @@ const Signup = () => {
             <Link
               to="/signin"
               state={
-                state.pathname
+                state?.pathname
                   ? { pathname: state.pathname, search: state.search }
                   : {}
               }
