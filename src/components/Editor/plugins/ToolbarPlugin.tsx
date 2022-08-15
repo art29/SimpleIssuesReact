@@ -545,7 +545,7 @@ export default function ToolbarPlugin() {
 
   // @ts-ignore
   return (
-    <div className="toolbar" ref={toolbarRef}>
+    <div className="toolbar overflow-scroll" ref={toolbarRef}>
       <button
         type="button"
         disabled={!canUndo}

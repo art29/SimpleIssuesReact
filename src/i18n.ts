@@ -9,6 +9,11 @@ const resources = {
         about: "About",
         help: "Help",
       },
+      organization: "Organization",
+      users: "Users",
+      previous: "Previous",
+      next: "Next",
+      loading: "Loading",
       language: "Language",
       english: "English",
       french: "Français (French)",
@@ -32,6 +37,8 @@ const resources = {
       name_required: "Please enter a valid name",
       email: "Email Address",
       email_required: "An email address is required.",
+      old_password: "Old Password",
+      old_password_required: "Please enter your old password.",
       password: "Password",
       password_required: "A password is required.",
       password_confirmation: "Password Confirmation",
@@ -55,9 +62,14 @@ const resources = {
       successfully_updated_issue: "Successfully updated the issue!",
       successfully_created_issue: "Successfully created the issue!",
       successfully_deleted_issue: "Successfully deleted the issue!",
+      successfully_updated_password: "Successfully updated your password!",
+      update_password: "Update Password",
+      account_manager: "Account Manager",
       comments_available_soon: "Comments will be available soon!",
       enter_a_bug_report_or_improvement:
         "Enter a bug report or improvement request",
+      you_can_try_selecting_an_organization_from_the_list:
+        "You can try selecting another organization from the list",
       errors: {
         default_error: "An error occurred, please try again later...",
         error_issue:
@@ -82,6 +94,10 @@ const resources = {
           "There was an error while changing the organization, please try again later.",
         error_changing_repo:
           "There was an error while changing the repo, please try again later.",
+        error_no_issues:
+          "No Issues found for these specific filters. Try removing filters or creating new issues!",
+        couldn_t_update_password:
+          "Sorry... We couldn't update your password. Please try again later.",
       },
       home: {
         title: "Simple Issues",
@@ -162,9 +178,25 @@ const resources = {
           admin: "Admin",
           regular: "Regular",
           save: "Save",
+          successfully_updated_labels:
+            "The labels have been successfully updated!",
+          error_updating_labels:
+            "An error occurred while updating labels. Please try again later.",
+          mandatory_labels: "Mandatory Labels",
+          mandatory_labels_subtitle:
+            "Labels that are required on issues to show up on Simple Issues",
+          added_labels: "Added Labels",
+          added_labels_subtitle:
+            "Labels that will be automatically added to issues created on Simple Issues",
+          add_or_invite_user: "Add or invite user",
+          successfully_added_user: "The user has been successfully added!",
+          successfully_invited_user:
+            "The user has been successfully invited to Simple Issues!",
           successfully_updated_role: "The role has been successfully updated!",
           error_update_role:
             "An error occurred while updating the role. Please try again later.",
+          error_adding_user:
+            "An error occurred while adding the user. Please try again later.",
           cannot_change_your_own_role: "You cannot update your own role.",
           remove: "Remove",
           remove_user: "Remove User",
@@ -203,6 +235,11 @@ const resources = {
         about: "À Propos",
         help: "Aide",
       },
+      organization: "Organization",
+      users: "Utilisateurs",
+      previous: "Précédent",
+      next: "Suivant",
+      loading: "Chargement",
       language: "Langue",
       english: "English (Anglais)",
       french: "Français",
@@ -226,6 +263,8 @@ const resources = {
       name_required: "Veuillez entrer un nom valide",
       email: "Addresse courriel",
       email_required: "Veuillez entrer une addresse courriel valide.",
+      old_password: "Ancien mot de passe",
+      old_password_required: "Veuillez entrer votre ancien mot de passe.",
       password: "Mot de passe",
       password_required: "Veuillez entrer un mot de passe valide.",
       password_confirmation: "Confirmation du mot de passe",
@@ -249,10 +288,16 @@ const resources = {
       successfully_updated_issue: "L'issue a été mise à jour avec succès !",
       successfully_deleted_issue: "L'issue a été supprimée avec succès !",
       successfully_created_issue: "L'issue a été créée avec succès !",
+      successfully_updated_password:
+        "Votre mot de passe a été modifé avec succès !",
+      update_password: "Mettre à jour le mot de passe",
+      account_manager: "Gestionnaire de compte",
       comments_available_soon:
         "Les commententaires seront disponibles bientôt !",
       enter_a_bug_report_or_improvement:
         "Entrez un rapport de bogues ou une demande d'amélioration",
+      you_can_try_selecting_an_organization_from_the_list:
+        "Vous pouvez essayer de selectionner une autre organization dans la liste",
       errors: {
         default_error:
           "Une erreur s'est produite, veuillez re-essayer plus tard...",
@@ -277,6 +322,10 @@ const resources = {
           "Il y a eu une erreur lors du changement d'organization, veuillez réessayer plus tard",
         error_changing_repo:
           "Il y a eu une erreur lors du changement de repo, veuillez réessayer plus tard",
+        error_no_issues:
+          "Aucunes issues pour les filtres selectionnés ont été trouvées. Essayez d'enlever les filtres ou de créer une nouvelle issue !",
+        couldn_t_update_password:
+          "Désolé... Nous avons pas pu changer votre mot de passe. Veuillez réessayer plus tard.",
       },
       home: {
         title: "Simple Issues",
@@ -357,11 +406,27 @@ const resources = {
           email: "Addresse Courriel",
           role: "Role",
           admin: "Administrateur",
-          regular: "Régulier",
+          regular: "Regulier",
           save: "Sauvegarder",
-          successfully_updated_role: "Le role à été mis à jour avec succès!",
+          successfully_updated_labels:
+            "Les étiquettes ont été mises à jour avec succès !",
+          error_updating_labels:
+            "Une erreur est survenue lors de la mise à jour des étiquettes. Veuillez réessayer plus tard.",
+          mandatory_labels: "Étiquettes requises",
+          mandatory_labels_subtitle:
+            "Étiquettes qui doivent être attachées à l'issue pour être affichées sur Simple Issues",
+          added_labels: "Étiquettes ajoutées",
+          added_labels_subtitle:
+            "Étiquettes qui seront automatiquement ajoutées lorsque les issues seront créées à partir de Simple Issues.",
+          add_or_invite_user: "Ajouter ou inviter l'utilisateur",
+          successfully_added_user: "L'utilisateur à été ajouté avec succès !",
+          successfully_invited_user:
+            "Le role à été invité à utiliser Simple Issues avec succès !",
+          successfully_updated_role: "Le role à été mis à jour avec succès !",
           error_update_role:
             "Une erreur est survenue lors de la mise à jour du role. Veuillez réessayer plus tard.",
+          error_adding_user:
+            "Une erreur est survenue lors de l'ajout de l'utilisateur. Veuillez réessayer plus tard.",
           cannot_change_your_own_role:
             "Vous ne pouvez pas modifier votre propre role.",
           remove: "Supprimer",

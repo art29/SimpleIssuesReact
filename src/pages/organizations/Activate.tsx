@@ -4,7 +4,11 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import APIClient from "../../axios";
 
-const Activate = () => {
+interface ActivateProps {
+  refreshEverything: () => void;
+}
+
+const Activate = ({ refreshEverything }: ActivateProps) => {
   const [orgName, setOrgName] = useState<string>("");
   const [orgNameError, setOrgNameError] = useState<boolean>(false);
   const [searchParams] = useSearchParams();
@@ -19,7 +23,7 @@ const Activate = () => {
     }
   }, []);
 
-  const activate = () => {
+  const activate = async () => {
     if (orgName) {
       setOrgNameError(false);
       APIClient.post("organizations/activate", {
@@ -35,8 +39,11 @@ const Activate = () => {
         })
         .catch(() => {
           toast.error(t("organizations.activate.activate_error"));
+        })
+        .then(async () => {
+          await refreshEverything();
+          navigate("/dashboard");
         });
-      navigate("/dashboard");
     } else {
       setOrgNameError(true);
     }

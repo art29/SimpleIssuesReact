@@ -11,23 +11,26 @@ import Signup from "./pages/auth/Signup";
 import Signin from "./pages/auth/Signin";
 import Home from "./pages/Home";
 import PrivateRoute from "./pages/auth/PrivateRoute";
-import Dashboard from "./pages/Dashboard";
+import Dashboard, { FilterParams } from "./pages/Dashboard";
 import About from "./pages/About";
 import Footer from "./components/Footer";
 import Feedback from "./pages/Feedback";
 import Help from "./pages/Help";
 import IssueModal from "./components/IssueModal";
-import { FilterParams, Organization, Repo } from "./components/Filterbar";
+import { Organization, Repo } from "./components/FilterBar";
 import APIClient from "./axios";
 import Activate from "./pages/organizations/Activate";
 import OrganizationManager from "./pages/organizations/OrganizationManager";
 import ErrorPage from "./components/ErrorPage";
 import ForgotPassword from "./pages/auth/ForgotPassword";
 import ResetPassword from "./pages/auth/ResetPassword";
+import AccountManager from "./pages/auth/AccountManager";
+import AddUserModal from "./pages/organizations/AddUserModal";
 
 function App() {
   const [issues, setIssues] = useState<any[]>([]);
   const [labels, setLabels] = useState<any[]>([]);
+  const [maxPage, setMaxPage] = useState(1);
   const [organization, setOrganization] = useState<Organization | null>(null);
   const [repo, setRepo] = useState<string>("");
   const [organizations, setOrganizations] = useState<Organization[]>([]);
@@ -64,6 +67,8 @@ function App() {
         setLabels(response.data.labels);
         setOrganization(response.data.organization);
         setRepo(response.data.repo);
+        setMaxPage(Number(response.data.max_page) ?? 1);
+        setError(null);
       })
       .catch((e) => {
         setError(e.response.status);
@@ -71,11 +76,15 @@ function App() {
       .then(() => setLoading(false));
   };
 
+  const refreshEverything = () => {
+    fetchIssues();
+    fetchOrganizations();
+    fetchRepos();
+  };
+
   useEffect(() => {
     if (localStorage.getItem("token")) {
-      fetchIssues();
-      fetchOrganizations();
-      fetchRepos();
+      refreshEverything();
     }
   }, []);
 
@@ -87,10 +96,21 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route
+            path="/account"
+            element={
+              <PrivateRoute>
+                <AccountManager />
+              </PrivateRoute>
+            }
+          />
+          <Route
             path="/signin"
             element={<Signin refreshIssues={() => fetchIssues()} />}
           />
-          <Route path="/signup" element={<Signup />} />
+          <Route
+            path="/signup"
+            element={<Signup refreshEverything={() => refreshEverything()} />}
+          />
           <Route path="/forgot_password" element={<ForgotPassword />} />
           <Route path="/reset_password" element={<ResetPassword />} />
           <Route path="/feedback" element={<Feedback />} />
@@ -99,7 +119,7 @@ function App() {
             path="/organizations/activate"
             element={
               <PrivateRoute>
-                <Activate />
+                <Activate refreshEverything={() => refreshEverything()} />
               </PrivateRoute>
             }
           />
@@ -107,10 +127,19 @@ function App() {
             path="/organizations/manager"
             element={
               <PrivateRoute>
-                <OrganizationManager />
+                <OrganizationManager labels={labels.map((l) => l.name)} />
               </PrivateRoute>
             }
-          />
+          >
+            <Route
+              path="/organizations/manager/add_user"
+              element={
+                <PrivateRoute>
+                  <AddUserModal />
+                </PrivateRoute>
+              }
+            />
+          </Route>
           <Route
             path="/dashboard"
             element={
@@ -124,6 +153,7 @@ function App() {
                   repos={repos}
                   error={error}
                   loadingIssues={loading}
+                  maxPage={maxPage}
                   refreshIssues={(filters?: FilterParams) =>
                     fetchIssues(filters)
                   }
@@ -153,9 +183,13 @@ function App() {
                 iconType="warning"
                 title={t("errors.404_error")}
                 paragraph={t("errors.404_paragraph")}
-                linkText={t(
-                  "errors.click_here_to_be_redirected_to_the_home_page"
-                )}
+                links={[
+                  {
+                    linkText: t(
+                      "errors.click_here_to_be_redirected_to_the_home_page"
+                    ),
+                  },
+                ]}
               />
             }
           />

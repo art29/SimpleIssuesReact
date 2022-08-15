@@ -11,7 +11,6 @@ import { useTranslation } from "react-i18next";
 import Editor from "./Editor/Editor";
 import APIClient from "../axios";
 import LabelSelectStyleConfig from "./LabelSelectStyleConfig";
-import { FilterParams } from "./Filterbar";
 
 interface IssueEditingBody {
   number?: number;
@@ -27,8 +26,7 @@ interface IssueModalItems {
 }
 
 interface IssueModalProps {
-  // eslint-disable-next-line no-unused-vars
-  refreshIssues: (filters?: FilterParams) => void;
+  refreshIssues: () => void;
 }
 
 const IssueModal = ({ refreshIssues }: IssueModalProps) => {
@@ -38,7 +36,6 @@ const IssueModal = ({ refreshIssues }: IssueModalProps) => {
   const { edit, editingBody, labels } = state as IssueModalItems;
 
   const handleClose = () => {
-    refreshIssues();
     navigate("/dashboard");
   };
 
@@ -59,6 +56,7 @@ const IssueModal = ({ refreshIssues }: IssueModalProps) => {
               edit ? "successfully_updated_issue" : "successfully_created_issue"
             )
           );
+          refreshIssues();
           handleClose();
         } else {
           toast.error(t("errors.default_error"));
@@ -86,6 +84,7 @@ const IssueModal = ({ refreshIssues }: IssueModalProps) => {
               edit ? "successfully_updated_issue" : "successfully_created_issue"
             )
           );
+          refreshIssues();
           handleClose();
         } else {
           toast.error(t("errors.default_error"));

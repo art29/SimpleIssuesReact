@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "react-toastify/dist/ReactToastify.min.css";
 import "../../index.css";
+import { useEffect } from "react";
 import APIClient from "../../axios";
 
 interface loginData {
@@ -52,6 +53,12 @@ const Signin = ({ refreshIssues }: signinProps) => {
         toast.error(t("errors.default_error"));
       });
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <div className="padding-30">

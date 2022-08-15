@@ -25,6 +25,22 @@ module.exports = {
     "react/function-component-definition": "off",
     "react/require-default-props": "off",
     "no-param-reassign": "off",
+    "jsx-a11y/label-has-associated-control": [
+      "error",
+      {
+        required: {
+          some: ["nesting", "id"],
+        },
+      },
+    ],
+    "jsx-a11y/label-has-for": [
+      "error",
+      {
+        required: {
+          some: ["nesting", "id"],
+        },
+      },
+    ],
     "react/jsx-filename-extension": [
       1,
       { extensions: [".js", ".jsx", ".ts", "tsx"] },

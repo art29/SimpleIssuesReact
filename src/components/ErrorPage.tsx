@@ -3,13 +3,17 @@ import { solid } from "@fortawesome/fontawesome-svg-core/import.macro";
 import { Link } from "react-router-dom";
 import { IconProp } from "@fortawesome/fontawesome-svg-core";
 
+export interface ErrorPageLink {
+  link?: string;
+  linkText: string;
+}
+
 interface ErrorPageProps {
   icon?: IconProp;
   iconType?: string;
   title: string;
   paragraph: string[] | string;
-  link?: string;
-  linkText: string;
+  links?: ErrorPageLink[];
 }
 
 const ErrorPage = ({
@@ -17,8 +21,7 @@ const ErrorPage = ({
   iconType = "danger",
   title,
   paragraph,
-  link = "/",
-  linkText,
+  links,
 }: ErrorPageProps) => {
   return (
     <div className="text-center my-5">
@@ -37,7 +40,12 @@ const ErrorPage = ({
       ) : (
         <h5 className="mb-2">{paragraph}</h5>
       )}
-      <Link to={link}>{linkText}</Link>
+      {links &&
+        links.map((l) => (
+          <Link key={l.link} to={l.link ?? "/home"}>
+            {l.linkText}
+          </Link>
+        ))}
     </div>
   );
 };

@@ -3,6 +3,7 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../../index.css";
+import { useEffect } from "react";
 import APIClient from "../../axios";
 
 interface signupData {
@@ -12,7 +13,11 @@ interface signupData {
   password_confirmation: string;
 }
 
-const Signup = () => {
+interface signupProps {
+  refreshEverything: () => void;
+}
+
+const Signup = ({ refreshEverything }: signupProps) => {
   const {
     register,
     handleSubmit,
@@ -39,6 +44,7 @@ const Signup = () => {
           toast.success(t("successfully_signed_up"));
           localStorage.setItem("token", response.data.token.token);
           localStorage.setItem("user", JSON.stringify(response.data.user));
+          refreshEverything();
           navigate(
             state?.pathname ? `${state.pathname}${state.search}` : "/dashboard"
           );
@@ -50,6 +56,12 @@ const Signup = () => {
         toast.error(t("errors.default_error"));
       });
   };
+
+  useEffect(() => {
+    if (localStorage.getItem("token")) {
+      navigate("/");
+    }
+  }, []);
 
   return (
     <div className="padding-30">
