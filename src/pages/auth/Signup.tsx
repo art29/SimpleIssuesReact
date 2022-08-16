@@ -3,7 +3,8 @@ import { toast } from "react-toastify";
 import { useTranslation } from "react-i18next";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import "../../index.css";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import APIClient from "../../axios";
 
 interface signupData {
@@ -27,8 +28,12 @@ const Signup = ({ refreshEverything }: signupProps) => {
   const { t } = useTranslation();
   const { state }: any = useLocation();
   const navigate = useNavigate();
+  const reRef = useRef<ReCAPTCHA>(null);
 
-  const signup = (data: signupData) => {
+  const signup = async (data: signupData) => {
+    const token = await reRef.current?.executeAsync();
+    reRef.current?.reset();
+
     APIClient.post(
       "register",
       {
@@ -36,6 +41,7 @@ const Signup = ({ refreshEverything }: signupProps) => {
         email: data.email,
         password: data.password,
         password_confirmation: data.password_confirmation,
+        token,
       },
       { withCredentials: true }
     )
@@ -138,6 +144,13 @@ const Signup = ({ refreshEverything }: signupProps) => {
             </p>
           )}
         </div>
+
+        <ReCAPTCHA
+          sitekey="6Lc3LoAhAAAAAIdHqGyhZvCz8zJdq03R7AqOH7OF"
+          size="invisible"
+          ref={reRef}
+        />
+
         <div className="d-grid gap-2 mb-4">
           <button type="submit" className="btn btn-primary">
             {t("signup")}

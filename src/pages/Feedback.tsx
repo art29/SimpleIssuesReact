@@ -1,6 +1,8 @@
 import { useForm } from "react-hook-form";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useRef } from "react";
 import APIClient from "../axios";
 
 interface FeedbackFormData {
@@ -18,12 +20,17 @@ const Feedback = () => {
   } = useForm<FeedbackFormData>();
 
   const { t } = useTranslation();
+  const reRef = useRef<ReCAPTCHA>(null);
 
-  const signup = (data: FeedbackFormData) => {
+  const sendFeedback = async (data: FeedbackFormData) => {
+    const token = await reRef.current?.executeAsync();
+    reRef.current?.reset();
+
     APIClient.post("feedback/send", {
       name: data.name,
       email: data.email,
       message: data.message,
+      token,
     })
       .then((response) => {
         if (response.status === 200) {
@@ -41,7 +48,7 @@ const Feedback = () => {
   return (
     <div className="padding-30">
       <h1 className="text-center py-3 fs-3-bold">{t("give_us_feedback")}</h1>
-      <form onSubmit={handleSubmit(signup)} className="py-4">
+      <form onSubmit={handleSubmit(sendFeedback)} className="py-4">
         <div className="mb-4">
           <label htmlFor="name" className="form-label">
             {t("name")}
@@ -89,6 +96,13 @@ const Feedback = () => {
             </p>
           )}
         </div>
+
+        <ReCAPTCHA
+          sitekey="6Lc3LoAhAAAAAIdHqGyhZvCz8zJdq03R7AqOH7OF"
+          size="invisible"
+          ref={reRef}
+        />
+
         <div className="d-grid gap-2 mb-4">
           <button type="submit" className="btn btn-primary">
             {t("send_feedback")}
