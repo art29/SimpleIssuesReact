@@ -10,7 +10,7 @@ const DevConfig: ConfigInterface = {
 };
 
 const ProdConfig: ConfigInterface = {
-  baseUrl: "https://api.simpleissues.new.afetiveau.com/api",
+  baseUrl: "https://api.simpleissues.afetiveau.com/api",
 };
 
 const Config = isDev() ? DevConfig : ProdConfig;
