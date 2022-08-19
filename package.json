@@ -34,8 +34,12 @@
     "axios": "^0.27.2",
     "bootstrap": "5.2.0-beta1",
     "chroma-js": "^2.4.2",
+    "husky": "^8.0.1",
     "i18next": "^21.8.10",
     "lexical": "^0.3.5",
+    "pinst": "^3.0.0",
+    "prettier": "^2.7.1",
+    "prettier-plugin-sort-json": "^0.0.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-google-recaptcha": "^2.1.0",
@@ -50,6 +54,7 @@
     "react-toastify": "^9.0.5",
     "remark-gfm": "^3.0.1",
     "remix-utils": "^3.3.0",
+    "ts-node": "^10.9.1",
     "typescript": "^4.4.2",
     "web-vitals": "^2.1.0"
   },
@@ -61,7 +66,10 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix",
     "prettier:format": "prettier --write './**/*.{js,jsx,ts,tsx,css,md,json}'",
-    "prettier:check": "prettier --check './**/*.{js,jsx,ts,tsx,css,md,json}'"
+    "prettier:check": "prettier --check './**/*.{js,jsx,ts,tsx,css,md,json}'",
+    "prettier:fix-i18n": "prettier --write src/locales/* --plugin=prettier-plugin-sort-json --json-recursive-sort",
+    "sync:i18n": "ts-node --project scripts/tsconfig.json scripts/syncTranslations.ts",
+    "postinstall": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -91,7 +99,6 @@
     "eslint-plugin-jsx-a11y": "^6.5.1",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-react": "^7.28.0",
-    "eslint-plugin-react-hooks": "^4.3.0",
-    "prettier": "^2.7.1"
+    "eslint-plugin-react-hooks": "^4.3.0"
   }
 }
