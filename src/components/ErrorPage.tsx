@@ -42,7 +42,7 @@ const ErrorPage = ({
       )}
       {links &&
         links.map((l) => (
-          <Link key={l.link} to={l.link ?? "/home"}>
+          <Link key={l.link} to={l.link ?? "/"}>
             {l.linkText}
           </Link>
         ))}
