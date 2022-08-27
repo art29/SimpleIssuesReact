@@ -4,6 +4,8 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import "../../index.css";
 import APIClient from "../../axios";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useRef } from "react";
 
 const ForgotPassword = () => {
   const {
@@ -14,10 +16,15 @@ const ForgotPassword = () => {
   } = useForm<{ email: string }>();
 
   const { t } = useTranslation();
+  const reRef = useRef<ReCAPTCHA>(null);
 
-  const forgotPassword = (data: { email: string }) => {
-    APIClient.post("forgot_password", {
+  const forgotPassword = async (data: { email: string }) => {
+    const token = await reRef.current?.executeAsync();
+    reRef.current?.reset();
+
+    await APIClient.post("forgot_password", {
       email: data.email,
+      token,
     })
       .then((response) => {
         if (response.status === 200) {
@@ -56,6 +63,13 @@ const ForgotPassword = () => {
             </p>
           )}
         </div>
+
+        <ReCAPTCHA
+          sitekey="6Lc3LoAhAAAAAIdHqGyhZvCz8zJdq03R7AqOH7OF"
+          size="invisible"
+          ref={reRef}
+        />
+
         <div className="d-grid gap-2 mb-4">
           <button type="submit" className="btn btn-primary">
             {t("forgot_password.reset_your_password")}
